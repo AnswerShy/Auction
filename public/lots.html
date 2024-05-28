@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Всі лоти</title>
+</head>
+<script src="./scripts/script.js" defer></script>
+<body>
+    <div id="header"></div>
+
+    <div class="search">
+        <input type="text" class="s_input"></header>
+        <div class="s_filters"></div>
+    </div>
+    <div class="page_content">
+        <aside class="s_filters_menu">
+            <p>Ціна за:</p>
+            <input type="radio" name="cost" value="cost_up">Зростанням</input>
+            <input type="radio" name="cost" value="cost_down">Спаданням</input>
+        </aside>
+        <div id="lot_container" class="lot_container"></div>
+    </div>
+</body>
+<script>
+
+    document.querySelector('.s_filters_menu').addEventListener('change', (e) =>{
+        lots_request_func(document.querySelector('input[name="cost"]:checked').value)
+    })
+    window.addEventListener('load', function() {
+        lots_request_func()
+    });
+
+</script>
+</html>

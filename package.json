@@ -1,0 +1,23 @@
+{
+  "name": "auction",
+  "version": "1.0.0",
+  "description": "Курсова робота",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnswerShy/Auction.git"
+  },
+  "author": "Kirill Panka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnswerShy/Auction/issues"
+  },
+  "homepage": "https://github.com/AnswerShy/Auction#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
+  }
+}

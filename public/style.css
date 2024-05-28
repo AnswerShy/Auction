@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+:root {
+    --background: rgba(65, 58, 58, 1);
+    --background_on: rgba(0, 0, 0, 0.36);
+    --background_card: rgba(46, 35, 35, 1);
+    --white: rgba(217, 217, 217, 1);
+    --border: 12px;
+}
+
+* {
+    row-gap: 20px;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    color: var(--white);
+    background-color: var(--background);
+}
+
+header {
+    width: 100%;
+    height: 81px;
+    background-color: var(--background_on);
+}
+
+.search {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 39px;
+}
+.s_input {
+    align-items: center;
+    width: 65%;
+    height: 100%;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--white);
+}
+.s_filters{
+    width: 25px;
+    height: 25px;
+}
+.s_filters_menu{
+    color: var(--background);
+    background-color: var(--white);
+    color: var(--background);
+    height: 100%;
+    padding: 15px;
+}
+aside {
+    left: 88.9%;
+    top: 80px;
+    background-color: var(--white);
+    width: 200px;
+    height: 100%;
+}
+.page_content{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+p {
+    font-family: "Inter", sans-serif;
+}
+a {
+    color: var(--white);
+    text-decoration: none;
+    font-family: "Inter", sans-serif;
+    font-size: 4vh;
+}
+
+a:any-link {
+    color: var(--white);
+}
+.lot_container {
+    padding: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.96%;
+    row-gap: 10px;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+.lot_class {
+    display: flex;
+    justify-content: center;
+    width: 277px;
+    height: 284px;
+    background-color: var(--white);
+    border-radius: var(--border);
+}
+.lot_pic {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-self: center;
+    width: 255px;
+    height: 255px;
+    background-color: var(--background_card);
+    border-radius: var(--border);
+    row-gap: 0;
+}
+.lot_name{
+    margin: 0 0 10px 0;
+    width: 100%;
+    text-align: center;
+}
+.lot_cost{
+    margin: 0 0 10px 0;
+    width: 100%;
+    text-align: center;
+}
