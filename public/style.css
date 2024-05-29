@@ -18,12 +18,23 @@ body{
     color: var(--white);
     background-color: var(--background);
 }
-
 header {
     width: 100%;
     height: 81px;
     background-color: var(--background_on);
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    column-gap: 15px;
+    
 }
+.header_button{
+    font-size: 2vh;
+}
+#menu {
+    fill: white;
+}
+
 
 .search {
     align-items: center;
@@ -49,7 +60,10 @@ header {
     color: var(--background);
     height: 100%;
     padding: 15px;
+    margin: 0 12px;
+    border-radius: 12px;
 }
+
 aside {
     left: 88.9%;
     top: 80px;
@@ -71,10 +85,10 @@ a {
     font-family: "Inter", sans-serif;
     font-size: 4vh;
 }
-
 a:any-link {
     color: var(--white);
 }
+
 .lot_container {
     padding: 35px;
     display: flex;
@@ -113,4 +127,25 @@ a:any-link {
     margin: 0 0 10px 0;
     width: 100%;
     text-align: center;
+}
+
+.auc_class{
+    display: flex;
+    flex-direction: column;
+    row-gap: 0;
+}
+.auc_name{
+    width: fit-content;
+    font-size: 3vh;
+    background-color: var(--white);
+    color: var(--background);
+    padding: 6px;
+    border-radius: 12px 12px 0 0;
+}
+.auc_content{
+    display: flex;
+    column-gap: 20px;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 0px 12px 12px 12px;
 }

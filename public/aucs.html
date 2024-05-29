@@ -8,41 +8,11 @@
 <script src="./scripts/script.js" defer></script>
 <body>
     <div id="header"></div>
-    <div class="page_content" style="flex-direction: column;"></div>
+    <div class="page_content" style="flex-direction: column;width: 75%;align-self: center;"></div>
 </body>
 <script>
     window.addEventListener('load', function() {
-       fetch('/aucs').then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const datalist = document.querySelector('.page_content');
-                datalist.innerHTML = '';
-                data.data.forEach(row => {
-                    console.log(`${row.ID}`)
-                    var cards = lots_request_func(`${row.ID}`)
-
-                    var auc = document.createElement('div')
-                    auc.className = 'auc_class'
-                    
-
-                    var name = document.createElement('div')
-                    name.className = 'auc_name'
-                    name.innerHTML = row.Назва;
-                    auc.appendChild(name)
-                    
-                    var content = document.createElement('div')
-                    content.className = 'auc_content'
-                    content.innerHTML = cards
-                    auc.appendChild(content)
-
-                    datalist.appendChild(auc)
-                });
-            })
-            .catch(error => console.error('Fetch error:', error));
+        aucs_request_func()
     });
 </script>
 </html>

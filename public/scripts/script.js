@@ -20,13 +20,11 @@ function lots_request_func(filter) {
                 return response.json();
             })
             .then(data => {
-                console.log(data.data)
                 var datalist = document.getElementById('lot_container');
-                if(document.getElementById('lot_container')) {
-                    datalist = document.getElementById('lot_container');
-                }
-                else {
-                    datalist = document.querySelector('.auc_content');
+                var isReturn = false
+                if (!datalist) {
+                    datalist = document.querySelector(`#auc_${filter}`);
+                    isReturn = true;
                 }
                 datalist.innerHTML = '';
                 data.data.forEach(row => {
@@ -51,4 +49,41 @@ function lots_request_func(filter) {
                 });
             })
             .catch(error => console.error('Fetch error:', error));
-    }
+}
+function aucs_request_func(){
+    fetch('/aucs').then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const datalist = document.querySelector('.page_content');
+        datalist.innerHTML = '';
+        data.data.forEach(row => {
+            var cardsThis = ''
+            var auc = document.createElement('div')
+            auc.className = 'auc_class'                   
+
+            var name = document.createElement('div')
+            name.className = 'auc_name'
+            name.innerHTML = row.Назва;
+            auc.appendChild(name)
+            
+            var content = document.createElement('div')
+            content.className = `auc_content`
+            content.id = `auc_${row.ID}`
+
+            auc.appendChild(content)
+            datalist.appendChild(auc)
+
+        });
+        return data
+    })
+    .then(data => {
+        data.data.forEach(row => {
+            lots_request_func(row.ID)
+        })
+    })
+    .catch(error => console.error('Fetch error:', error));
+}
