@@ -31,7 +31,7 @@ app.get('/lots', (req, res) => {
                 sql += " ORDER BY Ціна DESC";
                 break;
             default:
-                sql += ` WHERE ID_аукціону = ${filter}`;
+                sql = `SELECT * FROM Історія_лотів WHERE ID_аукціону = ${filter}`;
                 break;
         }
     }
@@ -65,11 +65,64 @@ app.get('/data', (req, res) => {
                 sql = "SELECT * FROM Історія_лотів ORDER BY Ціна_зміна DESC"
                 break;
             case "valued_buy_list":
-                console.log("sss")
                 sql = "SELECT * FROM Історія_лотів WHERE Статус IS NOT \"Списано\" ORDER BY Продано_за DESC"
                 break;
+            case "aucs_history":
+                sql = `SELECT 
+                        a.ID AS ID_аукціону,
+                        a.Назва AS Назва,
+                        a.Дата AS Дата,
+                        a.Час AS Час,
+                        a.Місце_проведення AS Місце_проведення,
+                        a.Дата_закриття AS Дата_закриття,
+                        JSON_GROUP_ARRAY(
+                            JSON_OBJECT(
+                                'ID_лоту', l.ID,
+                                'Опис', l.Опис,
+                                'Продавець', l.Продавець,
+                                'Ціна', l.Ціна,
+                                'Ціна_зміна', l.Ціна_зміна,
+                                'Картинка', l.Картинка,
+                                'Продано_за', l.Продано_за,
+                                'Покупець', l.Покупець,
+                                'Статус', l.Статус
+                            )
+                        ) AS Лоти
+                    FROM
+                        Історія_аукціонів a
+                    LEFT JOIN
+                        Історія_лотів l ON a.ID = l.ID_аукціону
+                    GROUP BY
+                        a.ID, a.Назва, a.Дата, a.Час, a.Місце_проведення, a.Дата_закриття;
+                    `
+                break;
+            case "unsolded_lots":
+                sql =  "SELECT * FROM Історія_лотів WHERE Статус IS \"Списано\""
+                break;
+            case "auc_and_buyer":
+                sql = `SELECT
+                    a.ID AS ID_аукціону,
+                    a.Назва AS Назва_аукціону,
+                        JSON_GROUP_ARRAY(
+                            JSON_OBJECT(
+                                'ID-покупця', p.ID,
+                                'Імя', p.Імя_користувача
+                            )
+                        ) AS Покупці
+                    FROM
+                        Історія_аукціонів a
+                    LEFT JOIN
+                        Історія_лотів l ON a.ID = l.ID_аукціону
+                    LEFT JOIN
+                        Покупці p ON l.Покупець = p.ID
+                    WHERE
+                        a.Дата_закриття IS NOT NULL
+                    GROUP BY
+                        a.ID, a.Назва, a.Дата, a.Час, a.Місце_проведення, a.Дата_закриття;
+                    `
+                break;
             default:
-                console.log(`${filter} not found in data`)
+                var sql = `SELECT * FROM Історія_лотів WHERE ID = ${filter}`
                 break;
         }
     }

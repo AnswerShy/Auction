@@ -1,0 +1,39 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Історія аукціонів</title>
+</head>
+<script src="./scripts/script.js" defer></script>
+<body>
+    <div id="header"></div>
+    <select name="select_history" id="select_history">
+        <option value="aucs_history" selected>Історія аукціонів</option>
+        <option value="unsolded_lots">Непродані лоти</option>
+        <option value="auc_and_buyer">Покупці з минулих лотів</option>
+    </select>
+    <div class="page_content" style="flex-direction: column;width: 75%;align-self: center;"></div>
+</body>
+<script>
+    window.addEventListener('load', function() {
+        aucs_history_request_func();
+    });
+    document.querySelector('#select_history').addEventListener('change', () => {
+            console.log(document.querySelector('#select_history').value)
+            var selected =  document.querySelector('#select_history').value
+            switch(selected) {
+                case "aucs_history":
+                    aucs_history_request_func();
+                    break;
+                case "unsolded_lots":
+                    unsolded_lots_func()
+                    break;
+                case "auc_and_buyer":
+                    auc_and_buyer_func()
+                    break;
+            }
+    })
+</script>
+</html>
+
