@@ -47,8 +47,32 @@ app.get('/lots', (req, res) => {
     });
 });
 
-app.get('/aucs', (req, res) => {
-    var sql = "SELECT * FROM Аукціон";
+app.get('/data', (req, res) => {
+    var filter = req.query.filter;
+    var sql = '';
+    if(filter) {
+        switch(filter) {
+            case "aucs":
+                var sql = "SELECT * FROM Аукціон";
+                break;
+            case "users_sum_stats":
+                var sql = "SELECT * FROM Покупці ORDER BY Сума_транзакцій DESC"
+                break;
+            case "sums_list":
+                sql = "SELECT * FROM Історія_лотів ORDER BY Ціна + Ціна_зміна DESC"
+                break;
+            case "changed_sums_list":
+                sql = "SELECT * FROM Історія_лотів ORDER BY Ціна_зміна DESC"
+                break;
+            case "valued_buy_list":
+                console.log("sss")
+                sql = "SELECT * FROM Історія_лотів WHERE Статус IS NOT \"Списано\" ORDER BY Продано_за DESC"
+                break;
+            default:
+                console.log(`${filter} not found in data`)
+                break;
+        }
+    }
     db.all(sql, [], (err, rows) => {
         if (err) {
             res.status(400).json({"error": err.message});
@@ -60,6 +84,7 @@ app.get('/aucs', (req, res) => {
         });
     });
 })
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

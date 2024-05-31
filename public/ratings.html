@@ -1,0 +1,27 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Auction</title>
+</head>
+<script src="./scripts/script.js" defer></script>
+<body>
+    <div id="header"></div>
+    <div class="page_content">
+        <div class="stats" id="valued_by">Найдорожчі покупки</div>
+        <div class="stats" id="stats_user">покупці, що заплатили найбільш грошей за свої покупки</div>
+        <div class="stats" id="changed_sum">лот, що найбільш додав в ціні під час аукціону</div>
+        <div class="stats" id="sums_list">найдорожчі лоти</div>
+    </div>
+</body>
+<script>
+    window.addEventListener('load', function() {
+        get_users_stats_func()
+        get_most_sum_lot_func()
+        get_most_changed_sum_lot_func()
+        get_most_valued_by_lot_func()
+    });
+</script>
+</html>
+

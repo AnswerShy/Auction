@@ -9,8 +9,20 @@
 
 * {
     row-gap: 20px;
+    font-family: "Inter", sans-serif;
 }
 
+a:any-link {
+    text-decoration: none;
+    font-size: 4vh;
+    color: var(--white);
+}
+
+.page_content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
 body{
     display: flex;
     flex-direction: column;
@@ -18,6 +30,8 @@ body{
     color: var(--white);
     background-color: var(--background);
 }
+
+/* ALL FOR HEADER */
 header {
     width: 100%;
     height: 81px;
@@ -29,13 +43,25 @@ header {
     
 }
 .header_button{
-    font-size: 2vh;
+    font-size: 2vh !important;
 }
-#menu {
+.menu_button {
     fill: white;
+    margin: 0 15px;
+}
+.menu_button:hover {
+    cursor: pointer;
+}
+.menu{
+    display: none;
+    position: absolute;
+    background: var(--background_card);
+    height: 100%;
+    width: 15%;
+    flex-direction: column;
 }
 
-
+/* FOR LOTS PAGE */
 .search {
     align-items: center;
     justify-content: center;
@@ -46,7 +72,7 @@ header {
     align-items: center;
     width: 65%;
     height: 100%;
-    border-radius: 12px;
+    border-radius: var(--border);
     border: none;
     background-color: var(--white);
 }
@@ -61,9 +87,8 @@ header {
     height: 100%;
     padding: 15px;
     margin: 0 12px;
-    border-radius: 12px;
+    border-radius: var(--border);
 }
-
 aside {
     left: 88.9%;
     top: 80px;
@@ -71,24 +96,8 @@ aside {
     width: 200px;
     height: 100%;
 }
-.page_content{
-    display: flex;
-    flex-direction: row-reverse;
-}
 
-p {
-    font-family: "Inter", sans-serif;
-}
-a {
-    color: var(--white);
-    text-decoration: none;
-    font-family: "Inter", sans-serif;
-    font-size: 4vh;
-}
-a:any-link {
-    color: var(--white);
-}
-
+/* ALL FOR LOTS */
 .lot_container {
     padding: 35px;
     display: flex;
@@ -129,6 +138,7 @@ a:any-link {
     text-align: center;
 }
 
+/* ALL FOR AUC PAGE */
 .auc_class{
     display: flex;
     flex-direction: column;
@@ -148,4 +158,26 @@ a:any-link {
     padding: 20px;
     background-color: var(--white);
     border-radius: 0px 12px 12px 12px;
+}
+
+/* All FOR STATISTIC */
+.stats {
+    align-self: stretch;
+    background-color: var(--white);
+    color: var(--background);
+    width: 20%;
+    padding: 15px;
+    border-radius: var(--border);
+    text-align: center;
+}
+
+.stats > .user {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.stats > .lot {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
