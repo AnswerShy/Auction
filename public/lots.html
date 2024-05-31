@@ -20,34 +20,14 @@
             <input type="radio" name="cost" value="cost_up">Зростанням</input>
             <input type="radio" name="cost" value="cost_down">Спаданням</input>
         </aside>
-    </div>
-    <div class="madal" style="display: none;">
-        <div class="info_display"></div>
-    </div>
-    
+    </div>    
 </body>
 <script>
-
     document.querySelector('.s_filters_menu').addEventListener('change', (e) =>{
-        lots_request_func(document.querySelector('input[name="cost"]:checked').value, clicklot)
+        lots_request_func(document.querySelector('input[name="cost"]:checked').value)
     })
     window.addEventListener('load', function() {
-        lots_request_func(null, clicklot)
-    });
-
-    function clicklot(){
-        document.querySelectorAll('.lot_class').forEach(element => {
-            element.addEventListener('click', e => {
-                console.log(element.id)
-                get_lot_data_func(element.id)
-                document.querySelector(".madal").style.display = "flex"
-            })
-        });
-    }
-
-    document.querySelector(".madal").addEventListener('click', (e) => {
-       e.target.style.display = "none"
+        lots_request_func()
     })
-
 </script>
 </html>

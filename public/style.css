@@ -31,19 +31,6 @@ body{
     background-color: var(--background);
 }
 
-.madal {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: var(--background_on);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-
-
 
 /* ALL FOR HEADER */
 header {
@@ -67,12 +54,17 @@ header {
     cursor: pointer;
 }
 .menu{
-    display: none;
-    position: absolute;
+    display: flex;
+    position: fixed;
     background: var(--background_card);
     height: 100%;
     width: 15%;
     flex-direction: column;
+    transform: translateX(-275px);
+    transition: transform 1s ease;
+}
+.menu > .header_button {
+    padding: 15px;
 }
 
 /* FOR LOTS PAGE */
@@ -122,12 +114,16 @@ aside {
     justify-content: center;
 }
 .lot_class {
+    box-shadow: 0px 5px 10px 0px #00000026;
     display: flex;
     justify-content: center;
     width: 277px;
     height: 284px;
     background-color: var(--white);
     border-radius: var(--border);
+}
+.lot_class:hover {
+    cursor: pointer;
 }
 .lot_pic {
     display: flex;
@@ -142,17 +138,19 @@ aside {
     row-gap: 0;
     background-size: cover;
     text-shadow: 0px 2px 2px black;
-    background-blend-mode: exclusion;
+    background-blend-mode: soft-light;
     background-position: center;
 }
 .lot_name{
     color: var(--white);
+    font-size: 2vh;
     margin: 0 0 10px 0;
     width: 100%;
     text-align: center;
 }
 .lot_cost{
     color: var(--white);
+    font-size: 2vh;
     margin: 0 0 10px 0;
     width: 100%;
     text-align: center;
@@ -181,6 +179,7 @@ aside {
     border-radius: 0 12px 0 0;
 }
 .auc_content{
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.201);
     display: flex;
     font-size: 3vh;
     color: var(--background);
@@ -189,6 +188,7 @@ aside {
     background-color: var(--white);
     border-radius: 0px 12px 12px 12px;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 /* All FOR STATISTIC */
@@ -201,7 +201,6 @@ aside {
     border-radius: var(--border);
     text-align: center;
 }
-
 .stats > .user {
     display: flex;
     flex-direction: row;
@@ -212,11 +211,29 @@ aside {
     flex-direction: row;
     justify-content: space-between;
 }
-
 #select_history {
     width: 40%;
     align-self: center;
+    font-size: 2vh;
+    border-radius: var(--border);
 }
+#select_history:focus-visible {
+    outline: none;
+}
+
+/* LOT DATA*/
+.madal {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: var(--background_on);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
 
 .info_display {
     height: 40%;
@@ -230,6 +247,7 @@ aside {
     border-radius: var(--border);
 
 }
+
 .lot_data_container > p {
     color: var(--background);
 }

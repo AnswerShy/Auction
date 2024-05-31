@@ -1,3 +1,4 @@
+// HEADER
 fetch('/header.html')
             .then(response => response.text())
             .then(data => {
@@ -6,17 +7,22 @@ fetch('/header.html')
 });
 function headerFunc() {
     document.querySelectorAll('.menu_button').forEach(element => {
-        element.addEventListener('click', () => {
-            if( document.querySelector('.menu').style.display == "flex") {
-                document.querySelector('.menu').style.display = "none"
-            }
-            else {
-                document.querySelector('.menu').style.display = "flex"
-            }  
+        element.addEventListener('mouseover', () => {
+            document.querySelector('.menu').style.transform = "translateX(0px)";                
+        })
+        element.addEventListener('mouseleave', () => {
+            document.querySelector('.menu').style.transform = "translateX(-275px)";                
         })
     });
+    document.querySelector('.menu').addEventListener('mouseover', (e) => {
+        document.querySelector('.menu').style.transform = "translateX(0px)";     
+    })
+    document.querySelector('.menu').addEventListener('mouseout', (e) => {
+        document.querySelector('.menu').style.transform = "translateX(-275px)";
+    })
 }
 
+// ALL LOTS PAGE
 function lots_request_func(filter, callback) {
         var filterQ = ''
         if (filter != null) {
@@ -65,9 +71,11 @@ function lots_request_func(filter, callback) {
                 });
                 if (callback) callback()
             })
+            .then(() => click_lot())
             .catch(error => console.error('Fetch error:', error));
 }
 
+// ALL AUCS PAGE
 function aucs_request_func(){
     fetch('/data?filter=aucs').then(response => {
         if (!response.ok) {
@@ -80,7 +88,7 @@ function aucs_request_func(){
         datalist.innerHTML = '';
         data.data.forEach(row => {
             var auc = document.createElement('div')
-            auc.className = 'auc_class'                   
+            auc.className = 'auc_class'              
 
             var name = document.createElement('div')
             name.className = 'auc_name'
@@ -105,7 +113,40 @@ function aucs_request_func(){
     .catch(error => console.error('Fetch error:', error));
 }
 
-// STATS PAGE
+// RATEING PAGE
+function get_most_expensive_buy_func(){
+    fetch('/data?filter=valued_buy_list').then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        const datalist = document.querySelector('#valued_by');
+        datalist.innerHTML += '';
+        for (var i = 0; i < 6; i++){
+            if(data.data[i].Продано_за) {
+                var div = document.createElement('div')
+                div.className = 'lot'
+                div.id = data.data[i].ID
+    
+                var name = document.createElement('p')
+                name.className = 'name'
+                name.innerHTML = `${i+1}. ` + data.data[i].Опис;
+                div.appendChild(name)                   
+    
+                var sum = document.createElement('p')
+                sum.className = 'sum'
+                sum.innerHTML = data.data[i].Продано_за + "₴";
+                div.appendChild(sum)
+    
+                datalist.appendChild(div)
+            }
+        }
+    })
+    .then(() => {click_lot()})
+    .catch(error => console.error('Fetch error:', error));
+}
 function get_users_stats_func(){
     fetch('/data?filter=users_sum_stats').then(response => {
         if (!response.ok) {
@@ -119,6 +160,7 @@ function get_users_stats_func(){
         for (var i = 0; i < 6; i++){
             var div = document.createElement('div')
             div.className = 'user'
+            div.id = data.data[i].ID
 
             var name = document.createElement('p')
             name.className = 'name'
@@ -128,35 +170,6 @@ function get_users_stats_func(){
             var sum = document.createElement('p')
             sum.className = 'sum'
             sum.innerHTML = data.data[i].Сума_транзакцій + "₴";
-            div.appendChild(sum)
-
-            datalist.appendChild(div)
-        }
-    })
-    .catch(error => console.error('Fetch error:', error));
-}
-function get_most_sum_lot_func(){
-    fetch('/data?filter=sums_list').then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        const datalist = document.querySelector('#sums_list');
-        datalist.innerHTML += '';
-        for (var i = 0; i < 6; i++){
-            var div = document.createElement('div')
-            div.className = 'lot'
-
-            var name = document.createElement('p')
-            name.className = 'name'
-            name.innerHTML = `${i+1}. ` + data.data[i].Опис;
-            div.appendChild(name)                   
-
-            var sum = document.createElement('p')
-            sum.className = 'sum'
-            sum.innerHTML = data.data[i].Ціна + data.data[i].Ціна_зміна + "₴";
             div.appendChild(sum)
 
             datalist.appendChild(div)
@@ -177,6 +190,7 @@ function get_most_changed_sum_lot_func(){
         for (var i = 0; i < 6; i++){
             var div = document.createElement('div')
             div.className = 'lot'
+            div.id = data.data[i].ID
 
             var name = document.createElement('p')
             name.className = 'name'
@@ -191,22 +205,24 @@ function get_most_changed_sum_lot_func(){
             datalist.appendChild(div)
         }
     })
+    .then(() => {click_lot()})
     .catch(error => console.error('Fetch error:', error));
 }
-function get_most_valued_by_lot_func(){
-    fetch('/data?filter=valued_buy_list').then(response => {
+function get_most_sum_lot_func(){
+    fetch('/data?filter=sums_list').then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
-        const datalist = document.querySelector('#valued_by');
+        const datalist = document.querySelector('#sums_list');
         datalist.innerHTML += '';
         for (var i = 0; i < 6; i++){
             var div = document.createElement('div')
             div.className = 'lot'
-
+            div.id = data.data[i].ID
+            
             var name = document.createElement('p')
             name.className = 'name'
             name.innerHTML = `${i+1}. ` + data.data[i].Опис;
@@ -214,16 +230,19 @@ function get_most_valued_by_lot_func(){
 
             var sum = document.createElement('p')
             sum.className = 'sum'
-            sum.innerHTML = data.data[i].Продано_за + "₴";
+            sum.innerHTML = data.data[i].Ціна + data.data[i].Ціна_зміна + "₴";
             div.appendChild(sum)
 
             datalist.appendChild(div)
         }
     })
+    .then(() => {click_lot()})
     .catch(error => console.error('Fetch error:', error));
 }
 
-// archive PAGE
+
+
+// ARChIVE PAGE
 function aucs_history_request_func(){
     fetch('/data?filter=aucs_history').then(response => {
         if (!response.ok) {
@@ -268,7 +287,6 @@ function aucs_history_request_func(){
     })
     .catch(error => console.error('Fetch error:', error));
 }
-
 function unsolded_lots_func() {
     fetch('/data?filter=unsolded_lots')
         .then(response => {
@@ -283,6 +301,7 @@ function unsolded_lots_func() {
             data.data.forEach(row => {
                 var card = document.createElement('div')
                 card.className = 'lot_class'
+                card.id = row.ID
 
                 var pic = document.createElement('div')
                 pic.className = 'lot_pic'
@@ -303,9 +322,9 @@ function unsolded_lots_func() {
                 datalist.appendChild(card)
             });
         })
+        .then(() => { click_lot()})
         .catch(error => console.error('Fetch error:', error));
 }
-
 function auc_and_buyer_func() {
     fetch('/data?filter=auc_and_buyer')
         .then(response => {
@@ -382,11 +401,13 @@ function get_lot_data_func(filter){
                     cost.textContent = `Ціна: ${row.Ціна}₴`;
                     dataCon.appendChild(cost)
 
-                    var cost_now = document.createElement('p')
-                    cost_now.className = 'lot_cost_now_display'
-                    cost_now.textContent = `Ціна змінилася на: ${row.Ціна_зміна}₴`;
-                    dataCon.appendChild(cost_now)
-
+                    if (row.Ціна_зміна != null) {
+                        var cost_now = document.createElement('p')
+                        cost_now.className = 'lot_cost_now_display'
+                        cost_now.textContent = `Ціна змінилася на: ${row.Ціна_зміна}₴`;
+                        dataCon.appendChild(cost_now)
+                    }
+                    
                     var status = document.createElement('p')
                     status.className = 'lot_status_display'
                     status.textContent = `Статус: ${row.Статус}`;
@@ -401,7 +422,61 @@ function get_lot_data_func(filter){
 
                     datalist.appendChild(dataCon)
                 });
-                if (callback) callback()
             })
             .catch(error => console.error('Fetch error:', error));
+}
+
+function click_lot(){ //SET CLICKABLE LOTS
+    if(document.querySelectorAll('.lot_class').length > 0) {
+        document.querySelectorAll('.lot_class').forEach(element => {
+            element.addEventListener('click', e => {
+                console.log(element.id)
+                get_lot_data_func(element.id)
+    
+                document.querySelector(".madal").style.display = "flex"
+    
+                setTimeout(() => {
+                    document.querySelector(".madal").style.opacity = 1
+                }, 100)
+                
+            })
+        });
+    }
+    else {
+        document.querySelectorAll('.lot').forEach(element => {
+            element.addEventListener('click', e => {
+                console.log(element.id)
+                console.log(element.id)
+                get_lot_data_func(element.id)
+    
+                document.querySelector(".madal").style.display = "flex"
+    
+                setTimeout(() => {
+                    document.querySelector(".madal").style.opacity = 1
+                }, 100)
+                
+            })
+        });     
+    }
+    
+    document.querySelector(".madal").addEventListener('click', (e) => {
+
+        document.querySelector(".madal").style.opacity = 0
+
+        setTimeout(() => {
+            document.querySelector(".madal").style.display = "none"
+        }, 500)
+    })
+}
+
+if(!document.querySelector('.madal')) { //SET MADAL MENU ON PAGE
+    var madal = document.createElement('div')
+    madal.className = "madal"
+    madal.style.display = "none"
+
+    var display = document.createElement('div')
+    display.className = "info_display"
+    madal.appendChild(display)
+
+    document.querySelector('body').appendChild(madal)
 }
