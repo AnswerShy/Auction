@@ -1,8 +1,11 @@
 const sqlite3 = require('sqlite3');
 const path = require('path');
 const express = require('express');
+const cookieParser = require('cookie-parser')
 
 const app = express();
+app.use(cookieParser())
+app.use(express.json())
 const dbPath = path.join(__dirname, 'database/databaseMain.db');
 
 let db = new sqlite3.Database(dbPath, (err) => {
@@ -56,7 +59,7 @@ app.get('/data', (req, res) => {
                 var sql = "SELECT * FROM Аукціон";
                 break;
             case "users_sum_stats":
-                var sql = "SELECT * FROM Покупці ORDER BY Сума_транзакцій DESC"
+                var sql = "SELECT * FROM Користувачі ORDER BY Сума_транзакцій DESC"
                 break;
             case "sums_list":
                 sql = "SELECT * FROM Історія_лотів ORDER BY Ціна + Ціна_зміна DESC"
@@ -105,7 +108,6 @@ app.get('/data', (req, res) => {
                     a.Назва AS Назва_аукціону,
                         JSON_GROUP_ARRAY(
                             JSON_OBJECT(
-                                'ID-покупця', p.ID,
                                 'Імя', p.Імя_користувача
                             )
                         ) AS Покупці
@@ -114,7 +116,7 @@ app.get('/data', (req, res) => {
                     LEFT JOIN
                         Історія_лотів l ON a.ID = l.ID_аукціону
                     LEFT JOIN
-                        Покупці p ON l.Покупець = p.ID
+                        Користувачі p ON l.Покупець = p.Імя_користувача
                     WHERE
                         a.Дата_закриття IS NOT NULL
                     GROUP BY
@@ -138,6 +140,57 @@ app.get('/data', (req, res) => {
     });
 })
 
+function isAuth(req, res, next) {
+    var id = JSON.parse(req.cookies.userData).userID
+    if(id == "admin") {
+        return next()
+    }
+    else {
+        return false
+    }
+}
+
+app.get('/login', (req, res) => {
+    const userID = "admin"
+    const userData = { userID }
+    const userDataString = JSON.stringify(userData)
+        
+    res.cookie('userData', userDataString)
+    res.send("logined")
+})
+app.get('/user_name_detect', (req, res) => {
+    // var id = JSON.parse(req.cookies.userData).userID
+    sql = "SELECT Імя_користувача FROM Користувачі WHERE Імя_користувача = \"admin\""
+    db.all(sql, [], (err, rows) => {
+        if(err) {
+            res.status(400).json({"error": err.message})
+            return
+        }
+        res.json({
+            "message": "success",
+            "data": rows
+        })
+    })
+    
+})
+
+app.post('/newlot', (req, res) => {
+    console.log(req.body.sql)
+    var sql = req.body.sql
+    
+    db.all(sql, [], (err, rows) => {
+        if(err) {
+            res.status(400).json({"error": err.message})
+            return
+        }
+        res.json({
+            "message": "success",
+            "data": {
+                id: this.lastID
+            }
+        })
+    })
+})
 
 const PORT = 3000;
 app.listen(PORT, () => {

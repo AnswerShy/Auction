@@ -1,9 +1,15 @@
 // HEADER
+fetch('/login.html')
+            .then(response => response.text())
+            .then(data => {
+                document.body.innerHTML += data
+            })
 fetch('/header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header').innerHTML = data;
                 headerFunc()
+                loginClickable()
 });
 function headerFunc() {
     document.querySelectorAll('.menu_button').forEach(element => {
@@ -240,8 +246,6 @@ function get_most_sum_lot_func(){
     .catch(error => console.error('Fetch error:', error));
 }
 
-
-
 // ARChIVE PAGE
 function aucs_history_request_func(){
     fetch('/data?filter=aucs_history').then(response => {
@@ -365,6 +369,43 @@ function auc_and_buyer_func() {
         .catch(error => console.error('Fetch error:', error));
 }
 
+// NEW LOT PAGE
+function new_lot_func(){
+    
+    fetch('/user_name_detect') 
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.querySelector('#lot_seller').innerHTML = data.data[0].Імя_користувача
+        return data
+    })
+    .then(() => {
+        console.log("loaded")
+        console.log(document.querySelector("#submit"))
+        document.querySelector("#submit").addEventListener('click', e => {
+            console.log("there")
+            var name = document.querySelector("#lot_name").value
+            var cost = document.querySelector("#lot_cost").value
+            var seller = document.querySelector("#lot_seller").innerHTML
+            var auc
+            if(document.querySelector("#lot_auc_name").value == '') {auc = "NULL"}
+            else {auc = document.querySelector("#lot_auc_name").innerHTML}
+
+            var sql = `INSERT INTO Історія_лотів(ID, ID_аукціону, Опис, Продавець, Ціна, Статус) VALUES (20, ${auc}, \"${name}\", \"${seller}\", ${cost}, \"Не_продано\")`
+            var ss = JSON.stringify({sql})
+            console.log(ss)
+            fetch('/newlot', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: ss})
+                .then(response => { response.json()})
+                .then(data => {console.log(data)})
+        })
+    })
+}
+
+
 // for all lots
 function get_lot_data_func(filter){
         fetch('/data?filter=' + filter)
@@ -479,4 +520,26 @@ if(!document.querySelector('.madal')) { //SET MADAL MENU ON PAGE
     madal.appendChild(display)
 
     document.querySelector('body').appendChild(madal)
+}
+
+//login
+
+function loginClickable() {
+    document.querySelector('#login').addEventListener('click', () => {
+        if( document.querySelector('.login').style.display == "flex") {
+            document.querySelector('.login').style.display = "none"
+        }
+        else {
+            document.querySelector('.login').style.display = "flex"
+        }
+    })
+    document.querySelector('#login_in').addEventListener('click', () => {
+        console.log("sended")
+        fetch('/login').then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+    })
 }

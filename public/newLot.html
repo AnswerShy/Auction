@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Auction</title>
+</head>
+<script src="./scripts/script.js" defer></script>
+<body>
+    <div id="header"></div>
+    <div class="page_content">
+        <div class="new_lot">
+            <p>Назва лоту:</p>
+            <input type="text" id="lot_name">
+            <p>Початкова ціна лоту:</p>
+            <input type="text" id="lot_cost">
+            <p>Продавець лоту:</p>
+            <p id="lot_seller"></p>
+            <p>Назва аукціону:</p>
+            <input type="text" id="lot_auc_name">
+            <input id="submit" type="button" value="Зареєструвати">
+        </div>
+    </div>
+</body>
+<script defer>
+    window.addEventListener('load', function() {
+        new_lot_func()
+    });
+</script>
+</html>
+
